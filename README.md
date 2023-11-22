@@ -44,7 +44,7 @@ $ npm exec new-day {YEAR} {DAY}
 At this point, you got three files :
 
 <h5 a><strong><code>challenge.js</code></strong></h5>
-blablabla
+Insert your algorithm into this method, don't hesitate to create other methods and class properties to resolve the problem and keep your code clean
 
 <h5 a><strong><code>input.txt</code></strong></h5>
 Each challenge comes with its input, the Challenge class of the <code>challenge.js</code> file will read it input inside of this file.
