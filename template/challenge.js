@@ -1,4 +1,4 @@
-const AdventOfCodeSolverProcessor = require( '../src/AdventOfCodeSolverProcessor');
+const AdventOfCodeSolverProcessor = require( '../../src/AdventOfCodeSolverProcessor');
 
 class AdventOfCodeSolver extends AdventOfCodeSolverProcessor {
     constructor() {

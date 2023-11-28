@@ -1,28 +1,33 @@
 {
     "name": "advent-of-code-node-starter",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "Advent Of Code - node.js starter",
     "main": "index.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
-      "type": "git",
-      "url": "git@github.com:JeanM38/advent-of-code-node-starter.git"
+        "type": "git",
+        "url": "git@github.com:JeanM38/advent-of-code-node-starter.git"
     },
     "keywords": [
-      "algo",
-      "node",
-      "advent"
+        "algo",
+        "node",
+        "advent"
     ],
     "author": "JeanM38[https://github.com/JeanM38]",
     "license": "ISC",
     "bin": {
-      "new-day": "./cli.js"
+        "new-day": "./cli.js"
     },
     "bugs": {
-      "url": "https://github.com/JeanM38/Advent-Of-Code/issues"
+        "url": "https://github.com/JeanM38/Advent-Of-Code/issues"
     },
-    "homepage": "https://github.com/JeanM38/Advent-Of-Code#readme"
-  }
-  
+    "homepage": "https://github.com/JeanM38/Advent-Of-Code#readme",
+    "dependencies": {
+        "axios": "^1.6.2",
+        "cheerio": "^1.0.0-rc.12",
+        "dotenv": "^16.3.1",
+        "turndown": "^7.1.2"
+    }
+}

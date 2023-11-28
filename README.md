@@ -31,17 +31,22 @@ $ cd my_advent_of_code
 ```shell
 $ npm link
 ```
+
+* Install all dependencies
+```shell
+$ npm install
+```
 </br>
 
-## 🛠️ Create a new day
+## 🛠️ Generate a new day
 
-Each day, a new algorithm to create, a template is here to help you, just run this command to create a new folder
+Each day, a new algorithm to create, a template is here to help you, just run this command to create a new folder and retrieve advent of code data
 
 ```shell
 $ npm exec new-day {YEAR} {DAY}
 ```
 
-At this point, you got three files :
+At this point, you got three files in a new folder (for example `2023/1`) :
 
 <h5 a><strong><code>challenge.js</code></strong></h5>
 Insert your algorithm into this method, don't hesitate to create other methods and class properties to resolve the problem and keep your code clean
@@ -50,8 +55,6 @@ Insert your algorithm into this method, don't hesitate to create other methods a
 Each challenge comes with its input, the Challenge class of the <code>challenge.js</code> file will read it input inside of this file.
 
 <h5 a><strong><code>README.md</code></strong></h5>
-If you want, you can write the challenge instructions here or maybe some personal notes/sources about the how you solved it.
-
-Don't hesitate to modify template files to have a code base of your convenience !
+You can retrieve the challenge instructions here
 
 ## Let's solve a problem !
