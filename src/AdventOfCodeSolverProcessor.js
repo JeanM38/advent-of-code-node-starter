@@ -4,8 +4,8 @@ const fs = require('fs');
  * A class for processing Advent of Code solver logic.
  */
 class AdventOfCodeSolverProcessor {
-    constructor() {
-        this.inputContent = this.readFile('./input.txt')
+    constructor(filePath) {
+        this.inputContent = this.readFile(filePath);
     }
 
     /**

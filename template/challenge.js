@@ -2,8 +2,7 @@ const AdventOfCodeSolverProcessor = require( '../../src/AdventOfCodeSolverProces
 
 class AdventOfCodeSolver extends AdventOfCodeSolverProcessor {
     constructor() {
-        super();
-        this.inputContent = this.inputContent;
+        super(__dirname + '/input.txt');
     }
 
     /**
