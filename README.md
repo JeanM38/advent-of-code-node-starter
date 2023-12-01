@@ -1,4 +1,4 @@
-# 🎅 advent-Of-Code-node-starter ⭐
+# 🎅 advent-of-code-node-starter ⭐
 This repository provides an optimal starting point for Advent of Code enthusiasts who prefer using Node.js
 
 </br>
@@ -57,4 +57,10 @@ Each challenge comes with its input, the Challenge class of the <code>challenge.
 <h5 a><strong><code>README.md</code></strong></h5>
 You can retrieve the challenge instructions here
 
-## Let's solve a problem !
+## 📜 This repository respects automation guidelines
+
+This repo/tool does follow [the automation guidelines on the /r/adventofcode]('https://www.reddit.com/r/adventofcode/wiki/faqs/automation/') community wiki
+
+## ⚠️ Be a good fellow
+
+Please don't push your solutions on GitHub, think about your developers friends

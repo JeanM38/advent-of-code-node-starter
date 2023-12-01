@@ -17,3 +17,10 @@ package-lock.json
 
 # Env
 .env
+
+# Challenges
+challenge.js
+input.txt
+
+# State
+state.json

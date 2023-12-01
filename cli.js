@@ -4,24 +4,39 @@ const cheerio = require('cheerio');
 const TurndownService = require('turndown');
 const fs = require('fs').promises;
 const { session } = require('./config.js');
+const stateFilePath = './state.json';
 
 class CodingChallengeCreator {
     constructor(year, day) {
         this.year = year;
         this.day = day;
         this.folderName = `./${this.year}/${this.day}`;
+        this.lastRequestTime = 0;
+        this.loadState();
+        this.requestInterval = 15 * 60 * 1000;
     }
 
-    /**
-     * @param {string} filePath 
-     * @param {string} content 
-     */
-    async writeToFile(filePath, content) {
+    async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    saveState() {
+        this.lastRequestTime = Date.now();
+
+        const state = {
+            lastRequestTime: this.lastRequestTime
+        };
+        fs.writeFile(stateFilePath, JSON.stringify(state), 'utf8')
+            .then(() => console.log(`Request timestamp saved in ${stateFilePath}`))
+            .catch(err => console.error('Error saving state:', err));
+    }
+
+    loadState() {
         try {
-            await fs.writeFile(filePath, content, 'utf8');
-            console.log(`${filePath} successfully created`);
-        } catch (err) {
-            console.error('Error writing file:', err);
+            const state = require(stateFilePath);
+            this.lastRequestTime = state.lastRequestTime || 0;
+        } catch (error) {
+            this.lastRequestTime = 0;
         }
     }
 
@@ -32,20 +47,56 @@ class CodingChallengeCreator {
         }
 
         if (parseInt(this.year) && parseInt(this.day)) {
-            try {
-                const adventData = await this.fetchAdventOfCodeData();
-                if (adventData) {
-                    await this.createFolder();
-                    await this.writeToFile(`${this.folderName}/README.md`, adventData.markdownContent);
-                    await this.writeToFile(`${this.folderName}/input.txt`, adventData.input);
-                    await this.copyChallengeFile();
-                    console.log(`\x1b[42m ${this.day}/${this.year}'s challenge successfully created \x1b[0m`);
-                } else {
-                    console.log('\x1b[43m Unable to fetch Advent of Code data. Challenge creation aborted. \x1b[0m');
-                }
-            } catch (err) {
-                console.error('Error Found:', err);
+            const adventData = await this.fetchAdventOfCodeData();
+            
+            if (adventData) {
+                await this.createFolder();
+                await this.writeToFile(`${this.folderName}/README.md`, adventData.markdownContent);
+                await this.writeToFile(`${this.folderName}/input.txt`, adventData.input);
+                await this.copyChallengeFile();
+                console.log(`\x1b[42m ${this.day}/${this.year}'s challenge successfully created \x1b[0m`);
+            } else {
+                console.log('\x1b[43m Unable to fetch Advent of Code data. Challenge creation aborted. \x1b[0m');
             }
+        }
+    }
+
+    async fetchAdventOfCodeData() {
+        try {
+            const currentTime = Date.now();
+
+            if (currentTime - this.lastRequestTime < this.requestInterval) {
+                const remainingTime = this.requestInterval - (currentTime - this.lastRequestTime);
+                console.log(`Rate limit exceeded. Waiting for ${remainingTime / 1000} seconds before making the next request.`);
+                await this.sleep(remainingTime);
+            }
+
+            this.saveState();
+
+            const headers = {
+                Cookie: `session=${session}`,
+                'User-Agent': 'https://github.com/JeanM38/advent-of-code-node-starter by JeanM38'
+            }
+
+            const pageResponse = await axios.get(`https://adventofcode.com/${this.year}/day/${this.day}`, {
+                headers: headers
+            });
+
+            const $ = cheerio.load(pageResponse.data);
+            const articleContent = $('article').html();
+            const turndownService = new TurndownService();
+            const markdownContent = turndownService.turndown(articleContent);
+
+            const inputResponse = await axios.get(`https://adventofcode.com/${this.year}/day/${this.day}/input`, {
+                headers: headers
+            });
+
+            const input = inputResponse.data;
+
+            return { markdownContent, input };
+        } catch (error) {
+            console.error('Error retrieving data:', error.message);
+            return null;
         }
     }
 
@@ -58,31 +109,16 @@ class CodingChallengeCreator {
         }
     }
 
-    async fetchAdventOfCodeData() {
+    /**
+     * @param {string} filePath 
+     * @param {string} content 
+     */
+    async writeToFile(filePath, content) {
         try {
-            const pageResponse = await axios.get(`https://adventofcode.com/${this.year}/day/${this.day}`, {
-                headers: {
-                    Cookie: `session=${session}`,
-                },
-            });
-
-            const $ = cheerio.load(pageResponse.data);
-            const articleContent = $('article').html();
-
-            const inputResponse = await axios.get(`https://adventofcode.com/${this.year}/day/${this.day}/input`, {
-                headers: {
-                    Cookie: `session=${session}`,
-                },
-            });
-
-            const input = inputResponse.data;
-            const turndownService = new TurndownService();
-            const markdownContent = turndownService.turndown(articleContent);
-
-            return { markdownContent, input };
-        } catch (error) {
-            console.error('Error retrieving data:', error.message);
-            return null;
+            await fs.writeFile(filePath, content, 'utf8');
+            console.log(`${filePath} successfully created`);
+        } catch (err) {
+            console.error('Error writing file:', err);
         }
     }
 
